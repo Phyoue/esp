@@ -1,5 +1,3 @@
--- Modify the ESP:Add function to adjust the position of the distance text
-
 local ESP = {
     Enabled = false,
     Boxes = false,
@@ -110,7 +108,6 @@ function ESP:AddObjectListener(parent, options)
                         IsEnabled = options.IsEnabled,
                         RenderInNil = options.RenderInNil
                     })
-                    -- TODO: add a better way of passing options
                     if options.OnAdded then
                         coroutine.wrap(options.OnAdded)(box)
                     end
@@ -166,8 +163,7 @@ function boxBase:Update()
     if self.Player and not ESP.Players then
         allow = false
     end
-    if self.IsEnabled and (type(self.IsEnabled) == "string" and not ESP[self.IsEnabled] or type(self.IsEnabled) ==
-        "function" and not self:IsEnabled()) then
+    if self.IsEnabled and (type(self.IsEnabled) == "string" and not ESP[self.IsEnabled] or type(self.IsEnabled) == "function" and not self:IsEnabled()) then
         allow = false
     end
     if not workspace:IsAncestorOf(self.PrimaryPart) and not self.RenderInNil then
@@ -232,8 +228,7 @@ function boxBase:Update()
         local TagPos, Vis5 = WorldToViewportPoint(cam, locs.TagPos.p)
 
         if Vis5 then
-            if self.Player and self.Player ~= localPlayer and self.Player.Character and
-                self.Player.Character:FindFirstChild("Humanoid") then
+            if self.Player and self.Player ~= localPlayer and self.Player.Character and self.Player.Character:FindFirstChild("Humanoid") then
                 self.Components.Name.Visible = true
                 self.Components.Name.Position = Vector2.new(TagPos.X, TagPos.Y)
                 self.Components.Name.Text = "[" .. self.Name .. "]"
@@ -241,14 +236,12 @@ function boxBase:Update()
 
                 self.Components.Distance.Visible = true
                 self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 15)
-                self.Components.Distance.Text = "[" .. math.floor((cam.CFrame.p - cf.p).magnitude) .. "m]"
+                self.Components.Distance.Text = math.floor((cam.CFrame.p - cf.p).magnitude) .. "m"
                 self.Components.Distance.Color = color
 
                 self.Components.Health.Visible = true
                 self.Components.Health.Position = Vector2.new(TagPos.X, TagPos.Y + 30)
-                self.Components.Health.Text = "[HP: " .. math.floor(self.Player.Character.Humanoid.Health + 0.5) .. "/" ..
-                    math.floor(self.Player.Character.Humanoid.MaxHealth + 0.5) .. "] [" ..
-                    math.floor((self.Player.Character.Humanoid.Health / self.Player.Character.Humanoid.MaxHealth) * 100) .. "%]"
+                self.Components.Health.Text = "[HP: " .. math.floor(self.Player.Character.Humanoid.Health + 0.5) .. "/" .. math.floor(self.Player.Character.Humanoid.MaxHealth + 0.5) .. "] [" .. math.floor((self.Player.Character.Humanoid.Health / self.Player.Character.Humanoid.MaxHealth) * 100) .. "%]"
                 self.Components.Health.Color = color
             elseif not (self.Player and self.Player == localPlayer) then
                 self.Components.Name.Visible = true
@@ -258,16 +251,14 @@ function boxBase:Update()
 
                 self.Components.Distance.Visible = true
                 self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 15)
-                self.Components.Distance.Text = "[" .. math.floor((cam.CFrame.p - cf.p).magnitude) .. "m]"
+                self.Components.Distance.Text = math.floor((cam.CFrame.p - cf.p).magnitude) .. "m"
                 self.Components.Distance.Color = color
 
                 local mobHumanoid = self.Object:FindFirstChild("Humanoid")
                 if self.Object:FindFirstChild("Target") and mobHumanoid then
                     self.Components.Health.Visible = true
                     self.Components.Health.Position = Vector2.new(TagPos.X, TagPos.Y + 30)
-                    self.Components.Health.Text = "[HP: " .. math.floor(mobHumanoid.Health + 0.5) .. "/" ..
-                        math.floor(mobHumanoid.MaxHealth + 0.5) .. "] [" ..
-                        math.floor((mobHumanoid.Health / mobHumanoid.MaxHealth) * 100) .. "%]"
+                    self.Components.Health.Text = "[HP: " .. math.floor(mobHumanoid.Health + 0.5) .. "/" .. math.floor(mobHumanoid.MaxHealth + 0.5) .. "] [" .. math.floor((mobHumanoid.Health / mobHumanoid.MaxHealth) * 100) .. "%]"
                     self.Components.Health.Color = color
                 end
             else
@@ -314,8 +305,7 @@ function ESP:Add(obj, options)
         Size = options.Size or self.BoxSize,
         Object = obj,
         Player = options.Player or plrs:GetPlayerFromCharacter(obj),
-        PrimaryPart = options.PrimaryPart or obj.ClassName == "Model" and (obj.PrimaryPart or
-            obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChildWhichIsA("BasePart")) or obj:IsA("BasePart") and obj,
+        PrimaryPart = options.PrimaryPart or obj.ClassName == "Model" and (obj.PrimaryPart or obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChildWhichIsA("BasePart")) or obj:IsA("BasePart") and obj,
         Components = {},
         IsEnabled = options.IsEnabled,
         Temporary = options.Temporary,
